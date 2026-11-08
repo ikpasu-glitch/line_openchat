@@ -153,7 +153,7 @@
       $('qrImg').src = PromptPay.qrDataUrl(PromptPay.payload(SHOP_CONFIG.PROMPTPAY_ID, o.total));
     } catch (e) {
       $('qrImg').classList.add('hidden');
-      $('backupAccount').textContent = 'สร้าง QR ไม่สำเร็จ กรุณาโอนตามบัญชีด้านล่าง: ' + (SHOP_CONFIG.BACKUP_ACCOUNT || '');
+      $('backupAccount').textContent = 'สร้าง QR ไม่สำเร็จ กรุณาโอนเข้าพร้อมเพย์ ' + SHOP_CONFIG.PROMPTPAY_ID + (SHOP_CONFIG.BACKUP_ACCOUNT ? ' หรือ ' + SHOP_CONFIG.BACKUP_ACCOUNT : '');
     }
     window.scrollTo(0, 0);
   }
