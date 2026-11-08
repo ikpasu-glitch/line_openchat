@@ -205,8 +205,33 @@
     $('pDesc').value = p ? p.description : ''; $('pInit').value = 0;
     $('pInitWrap').classList.toggle('hidden', !!p);        // สต๊อกของสินค้าเดิมแก้ที่แท็บสต๊อกเท่านั้น
     $('prodErr').classList.add('hidden');
+    $('pImgFile').value = ''; $('pImgMsg').textContent = '';
+    setPreview();
     $('prodDlg').showModal();
   }
+
+  /** แสดงรูปตัวอย่างจากลิงก์ในช่อง pImg (เฉพาะ https) */
+  function setPreview() {
+    var url = $('pImg').value.trim(), img = $('pImgPreview');
+    if (/^https:\/\//i.test(url)) { img.src = url; img.classList.remove('hidden'); }
+    else { img.removeAttribute('src'); img.classList.add('hidden'); }
+  }
+  $('pImg').addEventListener('input', setPreview);
+
+  // เลือกรูปจากเครื่อง -> ย่อรูป -> อัปโหลดขึ้น Drive -> ได้ลิงก์ใส่ช่อง pImg อัตโนมัติ
+  $('pImgFile').addEventListener('change', async function () {
+    var file = this.files[0]; if (!file) return;
+    var msg = $('pImgMsg'), ok = $('prodOk');
+    msg.textContent = 'กำลังอัปโหลดรูป...'; ok.disabled = true;
+    try {
+      var b64 = await Api.prepareSlip(file);
+      var res = await call('adminUploadProductImage', { imageBase64: b64 });
+      $('pImg').value = res.url; setPreview();
+      msg.textContent = 'อัปโหลดรูปสำเร็จ (กด "บันทึก" เพื่อใช้รูปนี้)';
+    } catch (e) {
+      msg.textContent = 'อัปโหลดไม่สำเร็จ: ' + e.message;
+    } finally { ok.disabled = false; }
+  });
   $('prodCancel').addEventListener('click', function () { $('prodDlg').close(); });
   $('prodForm').addEventListener('submit', async function (ev) {
     ev.preventDefault();
