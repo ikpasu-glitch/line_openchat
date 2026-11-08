@@ -1,41 +1,103 @@
-/* ธีมเขียวสด สำหรับหน้าลูกค้า (index.html, order.html) - หน้าแอดมินไม่ใช้ไฟล์นี้ */
+/* ธีมเขียวเข้ม + เขียวมะนาว (Dark Green / Lime) สำหรับหน้าลูกค้า (index.html, order.html)
+   หน้าแอดมินไม่ใช้ไฟล์นี้ */
 :root {
-  --bg: #eafaf0; --card: #ffffff; --text: #123524; --muted: #4f7a63; --line: #bfe8cf;
-  --brand: #16c060; --brand-dark: #0b8f43; --info: #0b8f43;
+  --bg: #0a2418; --card: rgba(255,255,255,.07); --text: #eaf5ee; --muted: #9dbba9; --line: rgba(190,255,150,.16);
+  --brand: #c6f432; --brand-dark: #b0e01c; --info: #c6f432; --danger: #ff6b6b;
+  --lime: #c6f432; --lime-ink: #10260a;
 }
 body {
   background:
-    radial-gradient(circle at 12% 0%, #c9f5da 0, transparent 38%),
-    radial-gradient(circle at 100% 20%, #d9f9b8 0, transparent 32%),
-    var(--bg);
+    radial-gradient(circle at 85% 8%, rgba(198,244,50,.16) 0, transparent 34%),
+    radial-gradient(circle at 5% 40%, rgba(40,160,90,.28) 0, transparent 40%),
+    linear-gradient(180deg, #0d3321 0%, #0a2418 55%, #071a11 100%);
   background-attachment: fixed;
+  color: var(--text);
 }
+a { color: var(--lime); }
+
+/* ---------- หัวเว็บ ---------- */
 .topbar {
-  background: linear-gradient(135deg, #0b8f43 0%, #16c060 55%, #7ddf64 100%);
-  box-shadow: 0 4px 16px rgba(11, 143, 67, .35);
-  border-radius: 0 0 22px 22px;
-  padding: 16px 0;
+  background: rgba(8, 32, 20, .85); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line); box-shadow: none; padding: 12px 0;
 }
-.topbar h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: .5px; text-shadow: 0 2px 6px rgba(0,0,0,.18); }
-.topbar a { font-weight: 600; background: rgba(255,255,255,.2); padding: 6px 12px; border-radius: 999px; text-decoration: none; }
-button, .btn {
-  background: linear-gradient(135deg, #16c060, #5fd35b);
-  box-shadow: 0 4px 10px rgba(22, 192, 96, .35);
-  font-weight: 600;
+.topbar h1 { font-size: 1.35rem; font-weight: 800; letter-spacing: 1px; color: #fff; text-shadow: none; }
+.topbar a {
+  color: var(--lime); font-weight: 600; font-size: .85rem; text-decoration: none;
+  background: rgba(198,244,50,.1); border: 1px solid rgba(198,244,50,.4); padding: 7px 14px; border-radius: 999px;
 }
-button:hover { background: linear-gradient(135deg, #0b8f43, #16c060); }
-button:disabled { background: #b8cfc1; box-shadow: none; }
-button.secondary { background: #d8f3e2; color: var(--brand-dark); box-shadow: none; }
-.card, .product { border-radius: 20px; box-shadow: 0 6px 18px rgba(22, 140, 80, .12); border-color: #cdeedb; }
-.product .img { background-color: #dcf6e6; }
-.product .price { color: var(--brand-dark); font-size: 1.05rem; }
-.chip { background: #f4fff8; border-color: #a9e3bf; color: var(--brand-dark); font-weight: 600; }
-.chip.active { background: linear-gradient(135deg, #16c060, #5fd35b); color: #fff; border-color: transparent; }
-.cartbar { background: rgba(255,255,255,.95); border-top: 2px solid #a9e3bf; box-shadow: 0 -6px 18px rgba(22,140,80,.15); }
-.drawer { background: #f1fff6; }
-input, textarea, select { border-color: #a9e3bf; background: #fbfffc; }
-input:focus, textarea:focus, select:focus { outline: 3px solid rgba(22,192,96,.3); border-color: var(--brand); }
-.row.total { border-top-color: #a9e3bf; color: var(--brand-dark); }
-.badge.green { background: #c9f5da; }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.logo { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.3); flex-shrink: 0; }
+.logo { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--lime); box-shadow: 0 0 14px rgba(198,244,50,.45); flex-shrink: 0; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; overflow: hidden; margin: 16px 0 8px; padding: 28px 22px 24px;
+  border-radius: 28px; border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 88% 30%, rgba(198,244,50,.28) 0, transparent 42%),
+    linear-gradient(135deg, #0f3d27 0%, #0a2418 70%);
+}
+.hero::after {
+  content: ''; position: absolute; right: -50px; top: -50px; width: 220px; height: 220px;
+  border-radius: 50%; border: 2px solid rgba(198,244,50,.25); box-shadow: 0 0 60px rgba(198,244,50,.18) inset;
+}
+.hero .kicker { color: var(--lime); font-size: .78rem; letter-spacing: 3px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.hero .kicker::after { content: ''; height: 1px; width: 50px; background: var(--lime); opacity: .6; }
+.hero h2 { position: relative; z-index: 1; font-size: 2.3rem; line-height: 1.1; font-weight: 800; margin: 14px 0 10px; color: #fff; }
+.hero h2 em { font-family: 'Kaushan Script', cursive; font-style: normal; font-weight: 400; color: var(--lime); font-size: 2.6rem; display: block; }
+.hero p { position: relative; z-index: 1; color: #cfe4d7; margin: 0 0 18px; max-width: 28ch; }
+.hero .cta { position: relative; z-index: 1; }
+.hero-logo { position: absolute; right: 14px; bottom: 14px; width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--lime); box-shadow: 0 0 30px rgba(198,244,50,.5); z-index: 1; }
+.perks { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; position: relative; z-index: 1; }
+.perk { font-size: .78rem; color: #dff3e6; background: rgba(255,255,255,.07); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
+.section-title { display: flex; align-items: center; gap: 12px; margin: 22px 0 0; font-size: 1.05rem; font-weight: 700; }
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+@media (max-width: 420px) { .hero h2 { font-size: 1.9rem; } .hero h2 em { font-size: 2.2rem; } .hero-logo { width: 90px; height: 90px; } }
+
+/* ---------- ปุ่ม ---------- */
+button, .btn {
+  background: var(--lime); color: var(--lime-ink); font-weight: 700;
+  box-shadow: 0 4px 16px rgba(198,244,50,.28); border-radius: 999px;
+}
+button:hover { background: #d8ff55; }
+button:disabled { background: rgba(255,255,255,.12); color: rgba(255,255,255,.4); box-shadow: none; }
+button.secondary { background: rgba(255,255,255,.1); color: var(--text); box-shadow: none; border: 1px solid var(--line); }
+button.secondary:hover { background: rgba(255,255,255,.16); }
+button.danger { background: var(--danger); color: #fff; }
+.qty button { border-radius: 12px; }
+
+/* ---------- การ์ด / สินค้า ---------- */
+.card, .product {
+  background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+  backdrop-filter: blur(6px); box-shadow: 0 10px 28px rgba(0,0,0,.25);
+}
+.product .img { background-color: rgba(255,255,255,.06); color: var(--muted); }
+.product .name { color: #fff; }
+.product .price { color: var(--lime); font-size: 1.1rem; }
+.product.soldout { opacity: .55; }
+.chip { background: rgba(255,255,255,.07); border: 1px solid var(--line); color: var(--text); font-weight: 600; }
+.chip.active { background: var(--lime); color: var(--lime-ink); border-color: var(--lime); }
+.badge { background: rgba(255,255,255,.12); color: var(--text); }
+.badge.red { background: rgba(255,107,107,.18); color: #ff9c9c; }
+.badge.green { background: rgba(198,244,50,.18); color: var(--lime); }
+.badge.yellow { background: rgba(255,200,60,.18); color: #ffd877; }
+.badge.blue { background: rgba(120,180,255,.18); color: #a9cdff; }
+
+/* ---------- ตะกร้า / ฟอร์ม ---------- */
+.cartbar { background: rgba(7, 26, 17, .92); backdrop-filter: blur(10px); border-top: 1px solid var(--line); box-shadow: 0 -8px 24px rgba(0,0,0,.35); }
+.cartbar strong { color: var(--lime); }
+.drawer { background: #0c2c1d; border: 1px solid var(--line); }
+.drawer-bg { background: rgba(0,0,0,.65); }
+.row.total { border-top-color: var(--line); color: var(--lime); }
+input, textarea, select { background: rgba(255,255,255,.08); color: var(--text); border: 1px solid var(--line); }
+input::placeholder, textarea::placeholder { color: #7f9d8c; }
+input:focus, textarea:focus, select:focus { outline: 2px solid rgba(198,244,50,.5); border-color: var(--lime); }
+input[type=file] { color: var(--muted); }
+input[type=checkbox] { accent-color: var(--lime); }
+
+/* ---------- ข้อความแจ้ง ---------- */
+.msg.error { background: rgba(255,107,107,.15); color: #ffb0b0; border: 1px solid rgba(255,107,107,.35); }
+.msg.ok { background: rgba(198,244,50,.12); color: #d9f78a; border: 1px solid rgba(198,244,50,.35); }
+.msg.info { background: rgba(120,180,255,.13); color: #b9d6ff; border: 1px solid rgba(120,180,255,.3); }
+.orderid { color: var(--lime); }
+.qrbox img { background: #fff; padding: 8px; border: 0; }
+.spinner { color: var(--muted); }
