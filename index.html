@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ร้านค้าออนไลน์</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <h1 id="shopName">ร้านค้า</h1>
+      <a href="order.html">เช็คสถานะออเดอร์</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- มุมมองเลือกสินค้า -->
+    <section id="viewShop">
+      <div id="chips" class="chips"></div>
+      <div id="loading" class="spinner">กำลังโหลดสินค้า...</div>
+      <div id="loadError" class="msg error hidden"></div>
+      <div id="grid" class="grid"></div>
+    </section>
+
+    <!-- มุมมองหลังสั่งสำเร็จ -->
+    <section id="viewDone" class="hidden">
+      <div class="card">
+        <div class="msg ok">สั่งซื้อสำเร็จ! กรุณาจดเลขออเดอร์ไว้</div>
+        <div class="muted">เลขออเดอร์ของคุณ</div>
+        <div class="orderid" id="doneOrderId"></div>
+        <button class="secondary small" id="copyOrderId" type="button">คัดลอกเลขออเดอร์</button>
+        <div class="row total"><span>ยอดที่ต้องโอน</span><span id="doneTotal"></span></div>
+        <div class="muted" id="doneBreakdown"></div>
+      </div>
+      <div class="card qrbox">
+        <h3>สแกนจ่ายด้วย PromptPay</h3>
+        <img id="qrImg" alt="PromptPay QR">
+        <p class="muted" id="backupAccount"></p>
+      </div>
+      <div class="card">
+        <h3>แนบสลิปการโอน</h3>
+        <input type="file" id="slipFile" accept="image/jpeg,image/png">
+        <button class="block" id="slipBtn" type="button" style="margin-top:10px">ส่งสลิป</button>
+        <div id="slipMsg"></div>
+        <p class="muted">หากยังไม่ได้แนบสลิป สามารถกลับมาแนบได้ที่หน้า "เช็คสถานะออเดอร์" โดยใช้เลขออเดอร์ + เบอร์โทร ออเดอร์ที่ไม่ชำระภายในเวลาที่กำหนดจะถูกยกเลิกอัตโนมัติ</p>
+      </div>
+      <a class="btn secondary block" href="index.html">กลับไปหน้าร้าน</a>
+    </section>
+  </main>
+
+  <!-- แถบตะกร้า -->
+  <div class="cartbar" id="cartBar">
+    <div class="container">
+      <div><strong id="cartCount">0</strong> ชิ้น · <strong id="cartTotal">0 บาท</strong></div>
+      <button id="openCart" type="button" disabled>ดูตะกร้า / สั่งซื้อ</button>
+    </div>
+  </div>
+
+  <!-- ลิ้นชักตะกร้า + ฟอร์ม -->
+  <div class="drawer-bg hidden" id="drawerBg"></div>
+  <div class="drawer hidden" id="drawer">
+    <div class="drawer-inner">
+      <div class="row"><h2 style="margin:0">ตะกร้าสินค้า</h2><button class="secondary small" id="closeCart" type="button">ปิด</button></div>
+      <div id="cartLines" class="card"></div>
+
+      <form id="orderForm" class="card" novalidate>
+        <h3>ข้อมูลจัดส่ง</h3>
+        <label for="fName">ชื่อ-นามสกุล</label>
+        <input id="fName" maxlength="100" autocomplete="name" required>
+        <label for="fPhone">เบอร์โทร</label>
+        <input id="fPhone" type="tel" inputmode="numeric" maxlength="12" autocomplete="tel" placeholder="0812345678" required>
+        <label for="fAddress">ที่อยู่จัดส่ง</label>
+        <textarea id="fAddress" maxlength="500" autocomplete="street-address" required></textarea>
+        <label for="fNote">หมายเหตุ (ถ้ามี)</label>
+        <input id="fNote" maxlength="300">
+        <label class="check" style="margin-top:14px">
+          <input type="checkbox" id="fPdpa">
+          <span>ข้าพเจ้ายอมรับให้ร้านเก็บ ชื่อ เบอร์โทร และที่อยู่ เพื่อใช้จัดส่งสินค้าเท่านั้น</span>
+        </label>
+        <p class="muted">ร้านจะไม่นำข้อมูลของคุณไปใช้เพื่อวัตถุประสงค์อื่น</p>
+        <div id="formError" class="msg error hidden"></div>
+        <button class="block" id="submitOrder" type="submit">ยืนยันสั่งซื้อ</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/promptpay.js"></script>
+  <script src="js/shop.js"></script>
+</body>
+</html>

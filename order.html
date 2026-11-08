@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>เช็คสถานะออเดอร์</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <h1>เช็คสถานะออเดอร์</h1>
+      <a href="index.html">← กลับหน้าร้าน</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <form id="lookupForm" class="card" novalidate>
+      <label for="oid">เลขออเดอร์</label>
+      <input id="oid" placeholder="เช่น A202601011234" maxlength="20" autocapitalize="characters" required>
+      <label for="ophone">เบอร์โทรที่ใช้สั่งซื้อ</label>
+      <input id="ophone" type="tel" inputmode="numeric" maxlength="12" required>
+      <div id="err" class="msg error hidden"></div>
+      <button class="block" id="lookupBtn" type="submit" style="margin-top:12px">ตรวจสอบ</button>
+    </form>
+
+    <div id="result" class="card hidden"></div>
+
+    <div id="slipCard" class="card hidden">
+      <h3>แนบสลิปการโอน</h3>
+      <input type="file" id="slipFile" accept="image/jpeg,image/png">
+      <button class="block" id="slipBtn" type="button" style="margin-top:10px">ส่งสลิป</button>
+      <div id="slipMsg"></div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    (function () {
+      var esc = Api.esc, baht = Api.baht;
+      var $ = function (id) { return document.getElementById(id); };
+      var cur = null;
+
+      function badgeClass(s) {
+        return { 'รอชำระ': 'yellow', 'รอตรวจสลิป': 'blue', 'ชำระแล้ว': 'green', 'จัดส่งแล้ว': 'green', 'ยกเลิก': 'red' }[s] || '';
+      }
+
+      function show(msg) { var e = $('err'); e.textContent = msg; e.classList.toggle('hidden', !msg); }
+
+      $('lookupForm').addEventListener('submit', async function (ev) {
+        ev.preventDefault(); show('');
+        var id = $('oid').value.trim().toUpperCase(), phone = $('ophone').value.replace(/[\s-]/g, '');
+        if (!/^A\d{12}$/.test(id)) return show('เลขออเดอร์ไม่ถูกต้อง');
+        if (!/^0\d{8,9}$/.test(phone)) return show('เบอร์โทรไม่ถูกต้อง');
+        var btn = $('lookupBtn'); btn.disabled = true; btn.textContent = 'กำลังตรวจสอบ...';
+        try {
+          var res = await Api.post({ action: 'getOrder', orderId: id, phone: phone });
+          cur = { id: id, phone: phone, order: res.order };
+          render(res.order);
+        } catch (e) {
+          show(e.message);
+          $('result').classList.add('hidden'); $('slipCard').classList.add('hidden');
+        } finally { btn.disabled = false; btn.textContent = 'ตรวจสอบ'; }
+      });
+
+      function render(o) {
+        var rows = o.items.map(function (it) {
+          return '<div class="row"><span>' + esc(it.name) + ' × ' + esc(it.qty) + '</span><span>' + esc(baht(it.price * it.qty)) + '</span></div>';
+        }).join('');
+        $('result').innerHTML =
+          '<div class="muted">เลขออเดอร์</div><div class="orderid" style="font-size:1.3rem">' + esc(o.orderId) + '</div>' +
+          '<p><span class="badge ' + badgeClass(o.status) + '">' + esc(o.status) + '</span> <span class="muted">' + esc(Api.fmtDate(o.createdAt)) + '</span></p>' +
+          rows +
+          '<div class="row"><span>ค่าส่ง</span><span>' + (o.shipping ? esc(baht(o.shipping)) : 'ฟรี') + '</span></div>' +
+          '<div class="row total"><span>ยอดรวม</span><span>' + esc(baht(o.total)) + '</span></div>' +
+          (o.trackingNo ? '<div class="msg ok">เลขพัสดุ: <strong>' + esc(o.trackingNo) + '</strong></div>' : '');
+        $('result').classList.remove('hidden');
+        $('slipCard').classList.toggle('hidden', o.status !== 'รอชำระ' && o.status !== 'รอตรวจสลิป');
+        $('slipMsg').innerHTML = '';
+      }
+
+      $('slipBtn').addEventListener('click', async function () {
+        var btn = $('slipBtn'), msg = $('slipMsg'); msg.innerHTML = '';
+        try {
+          var b64 = await Api.prepareSlip($('slipFile').files[0]);
+          btn.disabled = true; btn.textContent = 'กำลังส่งสลิป...';
+          await Api.post({ action: 'uploadSlip', orderId: cur.id, phone: cur.phone, slipBase64: b64 });
+          msg.innerHTML = '<div class="msg ok">ได้รับสลิปแล้ว ขอบคุณค่ะ ร้านจะตรวจสอบโดยเร็ว</div>';
+          cur.order.status = 'รอตรวจสลิป'; render(cur.order);
+          $('slipMsg').innerHTML = msg.innerHTML;
+        } catch (e) {
+          msg.innerHTML = '<div class="msg error">' + esc(e.message) + '</div>';
+        } finally { btn.disabled = false; btn.textContent = 'ส่งสลิป'; }
+      });
+    })();
+  </script>
+</body>
+</html>

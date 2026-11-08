@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>แอดมิน</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="padding-bottom:30px">
+  <header class="topbar">
+    <div class="container">
+      <h1>แอดมินร้านค้า</h1>
+      <button class="secondary small hidden" id="logoutBtn" type="button">ออกจากระบบ</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ล็อกอิน -->
+    <form id="loginForm" class="card">
+      <label for="pw">รหัสผ่านแอดมิน</label>
+      <input id="pw" type="password" autocomplete="current-password" required>
+      <div id="loginErr" class="msg error hidden"></div>
+      <button class="block" id="loginBtn" type="submit" style="margin-top:12px">เข้าสู่ระบบ</button>
+    </form>
+
+    <!-- แอป -->
+    <div id="app" class="hidden">
+      <div class="tabs">
+        <button class="tab active" data-tab="orders" type="button">ออเดอร์</button>
+        <button class="tab" data-tab="stock" type="button">สต๊อก</button>
+        <button class="tab" data-tab="products" type="button">สินค้า</button>
+        <button class="tab" data-tab="log" type="button">ประวัติ</button>
+      </div>
+      <div id="flash"></div>
+      <section id="tab-orders"></section>
+      <section id="tab-stock" class="hidden"></section>
+      <section id="tab-products" class="hidden"></section>
+      <section id="tab-log" class="hidden"></section>
+    </div>
+  </main>
+
+  <!-- ปรับสต๊อก -->
+  <dialog id="stockDlg">
+    <form id="stockForm" method="dialog">
+      <h3 id="stockTitle"></h3>
+      <label for="sQty">จำนวน</label>
+      <input id="sQty" type="number" min="1" step="1" required>
+      <label for="sReason">เหตุผล</label>
+      <select id="sReasonSel"></select>
+      <input id="sReason" placeholder="ระบุเหตุผลเอง" maxlength="100" style="margin-top:6px">
+      <div id="stockErr" class="msg error hidden"></div>
+      <div class="actions"><button type="submit" id="stockOk">บันทึก</button><button type="button" class="secondary" id="stockCancel">ยกเลิก</button></div>
+    </form>
+  </dialog>
+
+  <!-- แก้ไข/เพิ่มสินค้า -->
+  <dialog id="prodDlg">
+    <form id="prodForm" method="dialog">
+      <h3 id="prodTitle">สินค้า</h3>
+      <label>ชื่อ</label><input id="pName" maxlength="100" required>
+      <label>หมวด</label><input id="pCat" maxlength="50">
+      <label>ราคาขาย (บาท)</label><input id="pPrice" type="number" min="0" step="0.01" required>
+      <label>ต้นทุน (บาท)</label><input id="pCost" type="number" min="0" step="0.01">
+      <label>จุดสั่งซื้อซ้ำ (แจ้งเตือนเมื่อสต๊อกต่ำกว่า)</label><input id="pReorder" type="number" min="0" step="1" value="0">
+      <label>ลิงก์รูป (https://...)</label><input id="pImg" maxlength="500">
+      <label>คำอธิบาย</label><textarea id="pDesc" maxlength="500"></textarea>
+      <div id="pInitWrap"><label>สต๊อกเริ่มต้น</label><input id="pInit" type="number" min="0" step="1" value="0"></div>
+      <div id="prodErr" class="msg error hidden"></div>
+      <div class="actions"><button type="submit" id="prodOk">บันทึก</button><button type="button" class="secondary" id="prodCancel">ยกเลิก</button></div>
+    </form>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
