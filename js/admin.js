@@ -188,7 +188,8 @@
         return '<tr><td>' + esc(p.id) + '</td><td>' + esc(p.name) + '<div class="muted">' + esc(p.category) + '</div></td>' +
           '<td>' + esc(baht(p.price)) + '<div class="muted">ทุน ' + esc(p.cost) + '</div></td>' +
           '<td><button class="small secondary" data-act="editProd" data-id="' + esc(p.id) + '" type="button">แก้ไข</button> ' +
-          '<button class="small ' + (p.active ? 'danger' : '') + '" data-act="toggleProd" data-id="' + esc(p.id) + '" data-active="' + (p.active ? '0' : '1') + '" type="button">' + (p.active ? 'ซ่อน' : 'แสดง') + '</button></td></tr>';
+          '<button class="small ' + (p.active ? 'danger' : '') + '" data-act="toggleProd" data-id="' + esc(p.id) + '" data-active="' + (p.active ? '0' : '1') + '" type="button">' + (p.active ? 'ซ่อน' : 'แสดง') + '</button> ' +
+          '<button class="small danger" data-act="delProd" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '" type="button">ลบ</button></td></tr>';
       }).join('');
       $('tab-products').innerHTML = '<button data-act="newProd" type="button" style="margin-bottom:10px">+ เพิ่มสินค้าใหม่</button>' +
         '<div class="tablewrap"><table><tr><th>รหัส</th><th>สินค้า</th><th>ราคา</th><th></th></tr>' + rows + '</table></div>';
@@ -285,6 +286,11 @@
     else if (act === 'stockSub') openStock(id, 'sub');
     else if (act === 'newProd') openProd('');
     else if (act === 'editProd') openProd(id);
+    else if (act === 'delProd') {
+      if (!confirm('ลบสินค้า "' + el.dataset.name + '" ถาวร? (ย้อนกลับไม่ได้)\nออเดอร์เก่าจะไม่ได้รับผลกระทบ')) return;
+      try { await call('adminDeleteProduct', { productId: id }); flash('ลบสินค้าแล้ว', 'ok'); loadProducts(); }
+      catch (e) { flash(e.message, 'error'); }
+    }
     else if (act === 'toggleProd') {
       try { await call('adminToggleProduct', { productId: id, active: el.dataset.active === '1' }); loadProducts(); }
       catch (e) { flash(e.message, 'error'); }
