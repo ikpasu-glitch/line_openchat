@@ -1,0 +1,39 @@
+/* ธีมเขียวสด สำหรับหน้าลูกค้า (index.html, order.html) - หน้าแอดมินไม่ใช้ไฟล์นี้ */
+:root {
+  --bg: #eafaf0; --card: #ffffff; --text: #123524; --muted: #4f7a63; --line: #bfe8cf;
+  --brand: #16c060; --brand-dark: #0b8f43; --info: #0b8f43;
+}
+body {
+  background:
+    radial-gradient(circle at 12% 0%, #c9f5da 0, transparent 38%),
+    radial-gradient(circle at 100% 20%, #d9f9b8 0, transparent 32%),
+    var(--bg);
+  background-attachment: fixed;
+}
+.topbar {
+  background: linear-gradient(135deg, #0b8f43 0%, #16c060 55%, #7ddf64 100%);
+  box-shadow: 0 4px 16px rgba(11, 143, 67, .35);
+  border-radius: 0 0 22px 22px;
+  padding: 16px 0;
+}
+.topbar h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: .5px; text-shadow: 0 2px 6px rgba(0,0,0,.18); }
+.topbar a { font-weight: 600; background: rgba(255,255,255,.2); padding: 6px 12px; border-radius: 999px; text-decoration: none; }
+button, .btn {
+  background: linear-gradient(135deg, #16c060, #5fd35b);
+  box-shadow: 0 4px 10px rgba(22, 192, 96, .35);
+  font-weight: 600;
+}
+button:hover { background: linear-gradient(135deg, #0b8f43, #16c060); }
+button:disabled { background: #b8cfc1; box-shadow: none; }
+button.secondary { background: #d8f3e2; color: var(--brand-dark); box-shadow: none; }
+.card, .product { border-radius: 20px; box-shadow: 0 6px 18px rgba(22, 140, 80, .12); border-color: #cdeedb; }
+.product .img { background-color: #dcf6e6; }
+.product .price { color: var(--brand-dark); font-size: 1.05rem; }
+.chip { background: #f4fff8; border-color: #a9e3bf; color: var(--brand-dark); font-weight: 600; }
+.chip.active { background: linear-gradient(135deg, #16c060, #5fd35b); color: #fff; border-color: transparent; }
+.cartbar { background: rgba(255,255,255,.95); border-top: 2px solid #a9e3bf; box-shadow: 0 -6px 18px rgba(22,140,80,.15); }
+.drawer { background: #f1fff6; }
+input, textarea, select { border-color: #a9e3bf; background: #fbfffc; }
+input:focus, textarea:focus, select:focus { outline: 3px solid rgba(22,192,96,.3); border-color: var(--brand); }
+.row.total { border-top-color: #a9e3bf; color: var(--brand-dark); }
+.badge.green { background: #c9f5da; }
