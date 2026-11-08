@@ -43,7 +43,7 @@
     var btn = $('loginBtn'), err = $('loginErr'); err.classList.add('hidden');
     btn.disabled = true; btn.textContent = 'กำลังเข้าสู่ระบบ...';
     try {
-      var res = await Api.post({ action: 'adminLogin', password: $('pw').value });
+      var res = await Api.post({ action: 'adminLogin', password: $('pw').value.trim() });
       saveToken(res.token); $('pw').value = '';
       showApp(true); switchTab('orders');
     } catch (e) {
