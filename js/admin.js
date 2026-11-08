@@ -51,6 +51,7 @@
     } finally { btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ'; }
   });
   $('logoutBtn').addEventListener('click', function () { logout(''); });
+  $('showPw').addEventListener('change', function () { $('pw').type = this.checked ? 'text' : 'password'; });
 
   // ---------- แท็บ ----------
   function switchTab(name) {
