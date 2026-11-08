@@ -82,6 +82,38 @@
     });
   }
 
+  /** แปลง "1=50,2=80" เป็น [{n:1,price:50},...] เรียงตามจำนวน */
+  function parseTiers(str) {
+    var out = [];
+    String(str || '').split(/[,;\n]/).forEach(function (part) {
+      var m = /^\s*(\d+)\s*=\s*(\d+(?:\.\d+)?)\s*$/.exec(part);
+      if (m && Number(m[1]) >= 1) out.push({ n: Number(m[1]), price: Number(m[2]) });
+    });
+    return out.sort(function (a, b) { return a.n - b.n; });
+  }
+
+  /** ราคารวม qty หน่วย (ต้องตรงกับสูตรฝั่งเซิร์ฟเวอร์ tierPrice_) ใช้แสดงผลเท่านั้น */
+  function tierPrice(base, tiersStr, qty) {
+    var list = parseTiers(tiersStr);
+    if (!list.length) return base * qty;
+    var t = {}; list.forEach(function (x) { t[x.n] = x.price; });
+    var sizes = list.map(function (x) { return x.n; });
+    if (t[1] === undefined) { t[1] = base; sizes.push(1); }
+    var best = [0];
+    for (var i = 1; i <= qty; i++) {
+      var m = Infinity;
+      for (var k = 0; k < sizes.length; k++) {
+        var s = sizes[k];
+        if (s <= i && best[i - s] + t[s] < m) m = best[i - s] + t[s];
+      }
+      best[i] = m;
+    }
+    return Math.round(best[qty] * 100) / 100;
+  }
+
+  /** ยอดของรายการในออเดอร์ (ออเดอร์เก่าไม่มี lineTotal จึงใช้ ราคา x จำนวน) */
+  function lineTotal(it) { return it.lineTotal !== undefined ? it.lineTotal : it.price * it.qty; }
+
   function baht(n) { return Number(n).toLocaleString('th-TH') + ' บาท'; }
 
   function fmtDate(iso) {
@@ -90,5 +122,6 @@
     return d.toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' });
   }
 
-  window.Api = { get: get, post: post, prepareSlip: prepareSlip, esc: esc, baht: baht, fmtDate: fmtDate };
+  window.Api = { get: get, post: post, prepareSlip: prepareSlip, esc: esc, baht: baht, fmtDate: fmtDate,
+                 parseTiers: parseTiers, tierPrice: tierPrice, lineTotal: lineTotal };
 })();

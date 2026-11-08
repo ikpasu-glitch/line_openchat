@@ -101,3 +101,9 @@ input[type=checkbox] { accent-color: var(--lime); }
 .orderid { color: var(--lime); }
 .qrbox img { background: #fff; padding: 8px; border: 0; }
 .spinner { color: var(--muted); }
+
+/* ปุ่มเลือกขนาด (ราคาตามจำนวน) */
+.tiers { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0; }
+.tier { flex: 1 1 0; min-width: 52px; min-height: 0; padding: 6px 4px; font-size: .78rem; line-height: 1.25; border-radius: 12px; background: rgba(255,255,255,.08); color: var(--text); border: 1px solid var(--line); box-shadow: none; }
+.tier:hover { background: rgba(198,244,50,.18); }
+.tier.on { background: var(--lime); color: var(--lime-ink); border-color: var(--lime); }

@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=3">
-  <link rel="stylesheet" href="css/theme.css?v=3">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/theme.css?v=4">
 </head>
 <body>
   <header class="topbar">
@@ -38,8 +38,8 @@
     </div>
   </main>
 
-  <script src="js/config.js?v=3"></script>
-  <script src="js/api.js?v=3"></script>
+  <script src="js/config.js?v=4"></script>
+  <script src="js/api.js?v=4"></script>
   <script>
     (function () {
       var esc = Api.esc, baht = Api.baht;
@@ -70,7 +70,7 @@
 
       function render(o) {
         var rows = o.items.map(function (it) {
-          return '<div class="row"><span>' + esc(it.name) + ' × ' + esc(it.qty) + '</span><span>' + esc(baht(it.price * it.qty)) + '</span></div>';
+          return '<div class="row"><span>' + esc(it.name) + ' × ' + esc(it.qty) + (it.unit ? ' ' + esc(it.unit) : '') + '</span><span>' + esc(baht(Api.lineTotal(it))) + '</span></div>';
         }).join('');
         $('result').innerHTML =
           '<div class="muted">เลขออเดอร์</div><div class="orderid" style="font-size:1.3rem">' + esc(o.orderId) + '</div>' +

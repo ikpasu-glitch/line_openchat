@@ -42,15 +42,19 @@
     if (!list.length) { $('grid').innerHTML = '<p class="muted">ยังไม่มีสินค้า</p>'; return; }
     $('grid').innerHTML = list.map(function (p) {
       var q = state.cart[p.id] || 0, out = p.stock <= 0;
-      var img = safeImg(p.imageUrl);
+      var img = safeImg(p.imageUrl), tiers = Api.parseTiers(p.priceTiers);
       return '<div class="product' + (out ? ' soldout' : '') + '">' +
         '<div class="img"' + (img ? ' style="background-image:url(\'' + esc(encodeURI(img)) + '\')"' : '') + '>' + (img ? '' : '🛍️') + '</div>' +
         '<div class="body"><div class="name">' + esc(p.name) + '</div>' +
         '<div class="muted">' + esc(p.description) + '</div>' +
-        '<div class="price">' + esc(baht(p.price)) + '</div>' +
+        '<div class="price">' + (tiers.length ? 'เริ่ม ' : '') + esc(baht(p.price)) + (tiers.length ? ' / กรัม' : '') + '</div>' +
+        (tiers.length && !out ? '<div class="tiers">' + tiers.map(function (t) {
+          return '<button type="button" class="tier' + (q === t.n ? ' on' : '') + '" data-set="' + esc(p.id) + '" data-n="' + t.n + '"' + (t.n > p.stock ? ' disabled' : '') + '>' +
+            t.n + ' ก.<br>' + esc(t.price) + '฿</button>';
+        }).join('') + '</div>' : '') +
         (out ? '<span class="badge red">สินค้าหมด</span>' :
           '<div class="qty"><button type="button" data-dec="' + esc(p.id) + '"' + (q ? '' : ' disabled') + '>−</button>' +
-          '<span>' + q + '</span>' +
+          '<span>' + q + (tiers.length ? ' ก.' : '') + '</span>' +
           '<button type="button" data-inc="' + esc(p.id) + '"' + (q >= p.stock ? ' disabled' : '') + '>+</button></div>') +
         '</div></div>';
     }).join('');
@@ -66,7 +70,7 @@
 
   function totals() {
     var sub = 0, count = 0;
-    cartItems().forEach(function (it) { sub += it.p.price * it.qty; count += it.qty; });
+    cartItems().forEach(function (it) { sub += Api.tierPrice(it.p.price, it.p.priceTiers, it.qty); count += it.qty; });
     var c = state.config;
     var ship = count === 0 ? 0 : (c.freeShippingOver > 0 && sub >= c.freeShippingOver ? 0 : c.shippingFee);
     return { sub: sub, count: count, ship: ship, total: sub + ship };
@@ -90,7 +94,8 @@
     var freeNote = state.config.freeShippingOver > 0 && t.ship > 0
       ? '<div class="muted">ซื้อครบ ' + esc(baht(state.config.freeShippingOver)) + ' ส่งฟรี</div>' : '';
     $('cartLines').innerHTML = items.map(function (it) {
-      return '<div class="row"><span>' + esc(it.p.name) + ' × ' + it.qty + '</span><span>' + esc(baht(it.p.price * it.qty)) + '</span></div>';
+      var tiered = Api.parseTiers(it.p.priceTiers).length > 0;
+      return '<div class="row"><span>' + esc(it.p.name) + ' × ' + it.qty + (tiered ? ' ก.' : '') + '</span><span>' + esc(baht(Api.tierPrice(it.p.price, it.p.priceTiers, it.qty))) + '</span></div>';
     }).join('') +
       '<div class="row"><span>ค่าสินค้า</span><span>' + esc(baht(t.sub)) + '</span></div>' +
       '<div class="row"><span>ค่าส่ง</span><span>' + (t.ship === 0 ? 'ฟรี' : esc(baht(t.ship))) + '</span></div>' +
@@ -176,7 +181,16 @@
   // ---------- events ----------
   document.addEventListener('click', function (ev) {
     var t = ev.target;
-    if (t.dataset.inc) changeQty(t.dataset.inc, 1);
+    var tb = t.closest ? t.closest('[data-set]') : null;
+    if (tb) {                                      // กดปุ่มขนาด เช่น 3 ก. = ตั้งจำนวนเป็น 3
+      var tp = findProduct(tb.dataset.set);
+      if (tp) {
+        var want = Number(tb.dataset.n);
+        if (state.cart[tp.id] === want) delete state.cart[tp.id]; else state.cart[tp.id] = Math.min(want, tp.stock);
+        renderGrid(); renderCart();
+      }
+    }
+    else if (t.dataset.inc) changeQty(t.dataset.inc, 1);
     else if (t.dataset.dec) changeQty(t.dataset.dec, -1);
     else if (t.dataset.cat) { state.category = t.dataset.cat; renderChips(); renderGrid(); }
   });

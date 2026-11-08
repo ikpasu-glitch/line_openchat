@@ -102,7 +102,7 @@
     if (!open) return '<div class="card">' + head + '</div>';
 
     var items = o.items.map(function (it) {
-      return '<div class="row"><span>' + esc(it.name) + ' × ' + esc(it.qty) + '</span><span>' + esc(baht(it.price * it.qty)) + '</span></div>';
+      return '<div class="row"><span>' + esc(it.name) + ' × ' + esc(it.qty) + (it.unit ? ' ' + esc(it.unit) : '') + '</span><span>' + esc(baht(Api.lineTotal(it))) + '</span></div>';
     }).join('');
     var locked = o.status === 'ยกเลิก';
     var statusBtns = locked ? '' : S.statuses.filter(function (s) { return s !== o.status && s !== 'ยกเลิก'; }).map(function (s) {
@@ -205,6 +205,7 @@
     $('pPrice').value = p ? p.price : ''; $('pCost').value = p ? p.cost : 0;
     $('pReorder').value = p ? p.reorderLevel : 0; $('pImg').value = p ? p.imageUrl : '';
     $('pDesc').value = p ? p.description : ''; $('pInit').value = 0;
+    $('pTiers').value = p ? p.priceTiers : '';
     $('pInitWrap').classList.toggle('hidden', !!p);        // สต๊อกของสินค้าเดิมแก้ที่แท็บสต๊อกเท่านั้น
     $('prodErr').classList.add('hidden');
     $('pImgFile').value = ''; $('pImgMsg').textContent = '';
@@ -243,7 +244,7 @@
       await call('adminUpsertProduct', { product: {
         id: prodId, name: $('pName').value, category: $('pCat').value, price: Number($('pPrice').value),
         cost: Number($('pCost').value || 0), reorderLevel: Number($('pReorder').value || 0),
-        imageUrl: $('pImg').value, description: $('pDesc').value, initialStock: Number($('pInit').value || 0),
+        imageUrl: $('pImg').value, description: $('pDesc').value, initialStock: Number($('pInit').value || 0), priceTiers: $('pTiers').value,
         active: true
       } });
       $('prodDlg').close(); flash('บันทึกสินค้าแล้ว'); loadProducts();
