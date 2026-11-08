@@ -11,7 +11,7 @@
       var data = await Api.get('products');
       state.products = data.products;
       state.config = data.config;
-      $('shopName').textContent = data.config.shopName || SHOP_CONFIG.SHOP_NAME;
+      $('shopName').textContent = SHOP_CONFIG.SHOP_NAME || data.config.shopName;
       document.title = $('shopName').textContent;
       $('loading').classList.add('hidden');
       renderChips();

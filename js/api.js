@@ -61,7 +61,7 @@
    */
   function prepareSlip(file) {
     return new Promise(function (resolve, reject) {
-      if (!file) return reject(new Error('กรุณาเลือกรูปสลิป'));
+      if (!file) return reject(new Error('กรุณาเลือกรูปภาพ'));
       if (file.type !== 'image/jpeg' && file.type !== 'image/png') return reject(new Error('รองรับเฉพาะไฟล์ JPG และ PNG'));
       var url = URL.createObjectURL(file);
       var img = new Image();

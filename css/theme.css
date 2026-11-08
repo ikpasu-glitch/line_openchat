@@ -37,3 +37,5 @@ input, textarea, select { border-color: #a9e3bf; background: #fbfffc; }
 input:focus, textarea:focus, select:focus { outline: 3px solid rgba(22,192,96,.3); border-color: var(--brand); }
 .row.total { border-top-color: #a9e3bf; color: var(--brand-dark); }
 .badge.green { background: #c9f5da; }
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.logo { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.3); flex-shrink: 0; }
