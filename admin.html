@@ -66,7 +66,11 @@
       <label>ราคาขาย (บาท)</label><input id="pPrice" type="number" min="0" step="0.01" required>
       <label>ต้นทุน (บาท)</label><input id="pCost" type="number" min="0" step="0.01">
       <label>จุดสั่งซื้อซ้ำ (แจ้งเตือนเมื่อสต๊อกต่ำกว่า)</label><input id="pReorder" type="number" min="0" step="1" value="0">
-      <label>ลิงก์รูป (https://...)</label><input id="pImg" maxlength="500">
+      <label>รูปสินค้า</label>
+      <img id="pImgPreview" alt="" class="hidden" style="width:120px;height:120px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block;margin-bottom:6px">
+      <input type="file" id="pImgFile" accept="image/jpeg,image/png">
+      <div id="pImgMsg" class="muted"></div>
+      <label>หรือวางลิงก์รูป (https://...)</label><input id="pImg" maxlength="500">
       <label>คำอธิบาย</label><textarea id="pDesc" maxlength="500"></textarea>
       <div id="pInitWrap"><label>สต๊อกเริ่มต้น</label><input id="pInit" type="number" min="0" step="1" value="0"></div>
       <div id="prodErr" class="msg error hidden"></div>
