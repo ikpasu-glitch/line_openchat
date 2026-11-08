@@ -7,7 +7,7 @@ window.SHOP_CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbxLyUlqa06WuDBLXkzqCtFqXinqiRHvd7V3xlzmGFfq8erGAK64dJcJlnuka2xRsZft/exec',
 
   // ชื่อร้าน (ใช้เป็นค่าสำรองถ้าในชีต Settings ไม่ได้ตั้ง shopName)
-  SHOP_NAME: 'ร้านตัวอย่าง',
+  SHOP_NAME: 'Bigbro',
 
   // PromptPay ID: เบอร์มือถือ 10 หลัก (เช่น 0812345678) หรือเลขบัตรประชาชน 13 หลัก
   PROMPTPAY_ID: '0972617452',
